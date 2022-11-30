@@ -7,6 +7,11 @@ name: Docker
 
 on:
   workflow_dispatch:
+    inputs:
+      sign:
+        description: 'Sign image if true'     
+        required: true
+        default: 'false'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -33,7 +38,7 @@ jobs:
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
-        if: github.event_name != 'pull_request'
+        if: github.event.inputs.sign == 'true'
         uses: sigstore/cosign-installer@f3c664df7af409cb4873aa5068053ba9d61a57b6 #v2.6.0
         with:
           cosign-release: 'v1.11.0'
@@ -81,7 +86,7 @@ jobs:
       # transparency data even for private images, pass --force to cosign below.
       # https://github.com/sigstore/cosign
       - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
+        if: github.event.inputs.sign == 'true'
         env:
           COSIGN_EXPERIMENTAL: "true"
         # This step uses the identity token to provision an ephemeral certificate
