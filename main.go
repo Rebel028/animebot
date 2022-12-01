@@ -63,7 +63,13 @@ func HandleImage(message *botApi.Message) {
 	base64 := downloadhelper.DownloadImageAsBase64(file)
 	results := qqapi.RequestImage(base64)
 
+	log.Println("Saving media...")
+	SendReply(chatId, "Saving media...")
+
 	arr := append(addImages(results.ImgUrls), addVideos(results.VideoUrls)...)
+
+	log.Println("Creating album...")
+	SendReply(chatId, "Creating album...")
 
 	album := botApi.NewMediaGroup(chatId, arr)
 	if _, err := bot.Send(album); err != nil {
