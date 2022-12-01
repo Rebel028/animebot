@@ -68,7 +68,6 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=pep440,pattern={{version}}
             type=semver,pattern={{version}}
             type=raw,value=latest
 
